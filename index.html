@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMD — Press, Collabs & Marketing · Bayview Makers District</title>
+  <meta name="description" content="The official press and collaboration hub for the Bayview Makers District, San Francisco.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0E0C0A;
+      --paper: #F2EDE3;
+      --terra: #C4522A;
+      --terra-light: #D4673F;
+      --smoke: #181614;
+      --steel: #222018;
+      --muted: #7A746E;
+      --gold: #D4A843;
+      --cream: #EDE8DF;
+      --border: rgba(242,237,227,0.07);
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Libre Baskerville', serif;
+      --font-mono: 'DM Mono', monospace;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--ink); color: var(--paper); overflow-x: hidden; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* PROGRESS */
+    #progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--terra); z-index: 1001; width: 0; transition: width 0.1s linear; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between; transition: background 0.35s, padding 0.35s, border-color 0.35s; border-bottom: 1px solid transparent; }
+    nav.scrolled { background: rgba(14,12,10,0.96); backdrop-filter: blur(14px); padding: 1rem 3rem; border-bottom-color: var(--border); }
+    .nav-mark { font-family: var(--font-display); font-size: 1.9rem; color: var(--paper); text-decoration: none; letter-spacing: 0.04em; }
+    .nav-mark span { color: var(--terra); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(242,237,227,0.45); text-decoration: none; transition: color 0.25s; }
+    .nav-links a:hover { color: var(--paper); }
+    .nav-cta { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; background: var(--terra); color: var(--paper); padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.25s; }
+    .nav-cta:hover { background: var(--terra-light); }
+    .nav-hamburger { display: none; background: none; border: none; color: var(--paper); font-size: 1.5rem; cursor: pointer; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3rem 5rem; position: relative; background: var(--smoke); overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; font-family: var(--font-display); font-size: clamp(14rem, 30vw, 28rem); color: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; pointer-events: none; user-select: none; letter-spacing: -0.02em; }
+    .hero-line { width: 100%; height: 1px; background: var(--border); margin-bottom: 2.5rem; }
+    .hero-eyebrow { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--terra); margin-bottom: 1.25rem; opacity: 0; transform: translateY(18px); animation: fadeUp 0.8s var(--ease) 0.2s forwards; }
+    .hero-headline { font-family: var(--font-display); font-size: clamp(5.5rem, 15vw, 14rem); line-height: 0.9; letter-spacing: 0.01em; color: var(--paper); opacity: 0; transform: translateY(28px); animation: fadeUp 0.9s var(--ease) 0.35s forwards; }
+    .hero-headline .accent { color: var(--terra); display: block; }
+    .hero-sub { margin-top: 2.5rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 3rem; opacity: 0; transform: translateY(18px); animation: fadeUp 0.8s var(--ease) 0.55s forwards; }
+    .hero-descriptor { font-family: var(--font-body); font-size: clamp(0.88rem, 1.4vw, 1rem); color: rgba(242,237,227,0.45); font-style: italic; max-width: 420px; line-height: 1.8; }
+    .hero-ctas { display: flex; gap: 1rem; flex-shrink: 0; }
+
+    /* BUTTONS */
+    .btn-terra { background: var(--terra); color: var(--paper); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; padding: 0.9rem 2rem; text-decoration: none; display: inline-block; transition: background 0.25s; border: 2px solid var(--terra); }
+    .btn-terra:hover { background: var(--terra-light); border-color: var(--terra-light); }
+    .btn-ghost { background: transparent; color: var(--paper); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; padding: 0.9rem 2rem; text-decoration: none; display: inline-block; border: 2px solid rgba(242,237,227,0.2); transition: border-color 0.25s; }
+    .btn-ghost:hover { border-color: var(--paper); }
+    .btn-dark { background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; padding: 0.9rem 2rem; text-decoration: none; display: inline-block; border: 2px solid rgba(242,237,227,0.15); transition: all 0.25s; }
+    .btn-dark:hover { border-color: var(--terra); color: var(--terra); }
+
+    /* MARQUEE */
+    .marquee-wrap { background: var(--terra); overflow: hidden; padding: 0.85rem 0; }
+    .marquee-track { display: flex; white-space: nowrap; animation: marquee 35s linear infinite; }
+    .marquee-item { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.88); padding: 0 2.5rem; flex-shrink: 0; }
+    .marquee-sep { color: rgba(255,255,255,0.35); }
+
+    /* SECTIONS */
+    section { padding: 6rem 3rem; }
+    .container { max-width: 1300px; margin: 0 auto; }
+    .section-num { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.3em; color: var(--terra); display: block; margin-bottom: 0.5rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem); line-height: 0.93; color: var(--paper); }
+    .section-rule { height: 1px; background: var(--border); margin: 2.5rem 0; }
+
+    /* ABOUT */
+    #about { background: var(--smoke); }
+    .about-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 7rem; align-items: start; margin-top: 3rem; }
+    .about-pull { font-family: var(--font-body); font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.6; color: var(--paper); font-style: italic; border-left: 3px solid var(--terra); padding-left: 2rem; }
+    .about-pull strong { color: var(--terra); font-style: normal; }
+    .about-body { font-size: 0.88rem; line-height: 2; color: rgba(242,237,227,0.45); margin-top: 2rem; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+    .stat-box { background: var(--smoke); padding: 2.25rem 2rem; }
+    .stat-num { font-family: var(--font-display); font-size: 3.8rem; color: var(--terra); line-height: 1; display: block; }
+    .stat-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(242,237,227,0.28); margin-top: 0.4rem; display: block; }
+
+    /* PRESS */
+    #press { background: var(--ink); }
+    .press-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; }
+    .press-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 3rem; }
+    .press-card { background: var(--steel); padding: 2.5rem; position: relative; overflow: hidden; transition: background 0.25s; }
+    .press-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--terra); transform: scaleX(0); transition: transform 0.35s var(--ease); transform-origin: left; }
+    .press-card:hover { background: #2A2620; }
+    .press-card:hover::after { transform: scaleX(1); }
+    .press-pub { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terra); margin-bottom: 1rem; }
+    .press-title { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.65; color: var(--paper); margin-bottom: 1.5rem; font-style: italic; }
+    .press-date { font-family: var(--font-mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; }
+    .press-kit-bar { background: var(--steel); padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; border: 1px solid var(--border); }
+    .press-kit-title { font-family: var(--font-display); font-size: 2rem; color: var(--paper); }
+    .press-kit-sub { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 0.35rem; }
+    .media-contact { font-family: var(--font-mono); font-size: 0.7rem; color: rgba(242,237,227,0.4); letter-spacing: 0.05em; line-height: 1.9; }
+    .media-contact a { color: var(--terra); text-decoration: none; }
+    .media-contact a:hover { text-decoration: underline; }
+
+    /* INSTAGRAM */
+    #instagram { background: var(--smoke); }
+    .ig-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; }
+    .ig-handle { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--terra); text-decoration: none; }
+    .ig-handle:hover { text-decoration: underline; }
+    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .ig-card { aspect-ratio: 9/16; background: var(--steel); position: relative; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .ig-card-bg { position: absolute; inset: 0; background: linear-gradient(145deg, #1C1A16 0%, #252018 60%, #1A1714 100%); }
+    .ig-card-lines { position: absolute; inset: 0; opacity: 0.04; background-image: repeating-linear-gradient(45deg, transparent, transparent 12px, var(--terra) 12px, var(--terra) 13px); }
+    .ig-play { position: relative; z-index: 2; width: 60px; height: 60px; border: 2px solid rgba(242,237,227,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+    .ig-play::after { content: ''; border-left: 20px solid rgba(242,237,227,0.7); border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 5px; transition: border-color 0.3s; }
+    .ig-card:hover .ig-play { background: var(--terra); border-color: var(--terra); transform: scale(1.08); }
+    .ig-card:hover .ig-play::after { border-left-color: #fff; }
+    .ig-card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 100%); z-index: 3; transform: translateY(100%); transition: transform 0.35s var(--ease); }
+    .ig-card:hover .ig-card-info { transform: translateY(0); }
+    .ig-artist-name { font-family: var(--font-display); font-size: 1.3rem; color: var(--paper); display: block; }
+    .ig-artist-type { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terra); margin-top: 0.25rem; display: block; }
+    .ig-artist-loc { font-family: var(--font-mono); font-size: 0.58rem; color: rgba(242,237,227,0.45); margin-top: 0.3rem; display: block; }
+    .ig-note { margin-top: 2rem; padding: 1.5rem 2rem; border: 1px solid var(--border); background: rgba(196,82,42,0.04); font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.04em; line-height: 1.8; }
+    .ig-note strong { color: var(--terra); }
+    .ig-note code { background: rgba(255,255,255,0.06); padding: 0.1em 0.4em; border-radius: 2px; }
+
+    /* COLLABORATE */
+    #collaborate { background: var(--ink); }
+    .collab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin: 3rem 0; }
+    .collab-card { background: var(--steel); padding: 3rem 2.5rem; position: relative; }
+    .collab-bg-num { position: absolute; top: 1.25rem; right: 1.75rem; font-family: var(--font-display); font-size: 5rem; color: rgba(196,82,42,0.1); line-height: 1; pointer-events: none; }
+    .collab-type-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terra); margin-bottom: 1.25rem; }
+    .collab-title { font-family: var(--font-display); font-size: 2.2rem; color: var(--paper); line-height: 1.05; margin-bottom: 1rem; }
+    .collab-desc { font-family: var(--font-body); font-size: 0.82rem; line-height: 1.9; color: rgba(242,237,227,0.45); margin-bottom: 2rem; }
+    .collab-list { list-style: none; }
+    .collab-list li { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; color: rgba(242,237,227,0.35); padding: 0.5rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
+    .collab-list li::before { content: '→'; color: var(--terra); }
+    .collab-bottom { text-align: center; padding: 4rem 0 1rem; }
+    .collab-bottom-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); color: var(--paper); }
+    .collab-bottom-sub { font-family: var(--font-body); font-size: 0.9rem; color: var(--muted); font-style: italic; margin: 0.75rem 0 2rem; }
+
+    /* BRAND ASSETS */
+    #assets { background: var(--paper); }
+    #assets .section-title { color: var(--ink); }
+    #assets .section-num { color: var(--terra); }
+    .assets-into { font-family: var(--font-body); font-size: 0.9rem; color: rgba(14,12,10,0.45); font-style: italic; max-width: 480px; line-height: 1.85; margin-top: 0.75rem; }
+    .assets-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+    .asset-card { border: 1px solid rgba(14,12,10,0.1); overflow: hidden; }
+    .asset-preview { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 2.8rem; letter-spacing: 0.05em; }
+    .asset-preview.ap-dark { background: var(--ink); color: var(--paper); }
+    .asset-preview.ap-light { background: #fff; color: var(--ink); border: 1px solid rgba(14,12,10,0.06); }
+    .asset-preview.ap-terra { background: var(--terra); color: #fff; }
+    .asset-preview.ap-palette { background: var(--cream); flex-direction: column; gap: 0.5rem; }
+    .palette-dots { display: flex; gap: 0.5rem; }
+    .palette-dot { width: 30px; height: 30px; border-radius: 50%; }
+    .asset-info { padding: 1.25rem; background: #fff; }
+    .asset-name { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); display: block; margin-bottom: 0.3rem; }
+    .asset-desc { font-family: var(--font-body); font-size: 0.75rem; color: rgba(14,12,10,0.45); }
+    .asset-dl { display: block; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terra); text-decoration: none; }
+    .asset-dl:hover { text-decoration: underline; }
+    .assets-note { margin-top: 2rem; font-family: var(--font-mono); font-size: 0.65rem; color: rgba(14,12,10,0.35); letter-spacing: 0.04em; line-height: 1.7; }
+
+    /* CONTACT */
+    #contact { background: var(--smoke); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 7rem; align-items: start; margin-top: 3rem; }
+    .contact-intro { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.95; color: rgba(242,237,227,0.45); font-style: italic; margin-top: 1.5rem; }
+    .contact-types { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
+    .ct-item { display: flex; align-items: center; gap: 0.9rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,237,227,0.35); }
+    .ct-item::before { content: ''; width: 7px; height: 7px; background: var(--terra); border-radius: 50%; flex-shrink: 0; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,237,227,0.35); margin-bottom: 0.6rem; }
+    .form-input, .form-select, .form-textarea { width: 100%; background: rgba(255,255,255,0.035); border: 1px solid var(--border); color: var(--paper); font-family: var(--font-body); font-size: 0.9rem; padding: 0.9rem 1rem; outline: none; transition: border-color 0.25s; appearance: none; -webkit-appearance: none; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(196,82,42,0.6); }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(242,237,227,0.18); }
+    .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A746E' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-color: rgba(255,255,255,0.035); cursor: pointer; }
+    .form-select option { background: #222018; color: var(--paper); }
+    .form-textarea { resize: vertical; min-height: 140px; line-height: 1.75; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-submit { width: 100%; background: var(--terra); color: #fff; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; padding: 1rem; border: none; cursor: pointer; transition: background 0.25s; margin-top: 0.5rem; }
+    .form-submit:hover { background: var(--terra-light); }
+    .form-submit:disabled { opacity: 0.6; cursor: default; }
+    #form-success { display: none; background: rgba(196,82,42,0.07); border: 1px solid rgba(196,82,42,0.25); padding: 1.25rem; font-family: var(--font-mono); font-size: 0.68rem; color: var(--terra); letter-spacing: 0.05em; margin-top: 1rem; text-align: center; }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid var(--border); padding: 3rem; }
+    .footer-inner { max-width: 1300px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-mark { font-family: var(--font-display); font-size: 2rem; color: var(--paper); text-decoration: none; letter-spacing: 0.04em; }
+    .footer-mark span { color: var(--terra); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--paper); }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.58rem; color: rgba(242,237,227,0.18); letter-spacing: 0.06em; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.75s var(--ease), transform 0.75s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.2s; }
+    .rd3 { transition-delay: 0.3s; }
+    .rd4 { transition-delay: 0.4s; }
+
+    /* MOBILE */
+    @media (max-width: 960px) {
+      nav { padding: 1.25rem 1.5rem; }
+      nav.scrolled { padding: 0.85rem 1.5rem; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: block; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 56px; left: 0; right: 0; background: rgba(14,12,10,0.98); padding: 1.5rem; gap: 1.25rem; border-bottom: 1px solid var(--border); }
+      #hero { padding: 0 1.5rem 4rem; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .press-grid { grid-template-columns: 1fr; }
+      .collab-grid { grid-template-columns: 1fr; }
+      .assets-grid { grid-template-columns: 1fr 1fr; }
+      .ig-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .press-kit-bar { flex-direction: column; align-items: flex-start; }
+      .hero-sub { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      .press-header { flex-direction: column; align-items: flex-start; }
+      .ig-header { flex-direction: column; align-items: flex-start; }
+      footer { padding: 2rem 1.5rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+    @media (max-width: 560px) {
+      .assets-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .hero-ctas { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav id="top-nav">
+  <a href="#hero" class="nav-mark">BM<span>D</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">District</a></li>
+    <li><a href="#press">Press</a></li>
+    <li><a href="#instagram">Artists</a></li>
+    <li><a href="#collaborate">Collaborate</a></li>
+    <li><a href="#assets">Assets</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Pitch Us</a>
+  <button class="nav-hamburger" id="hamburger">&#9776;</button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg">MAKERS</div>
+  <div class="hero-line"></div>
+  <div class="hero-eyebrow">Bayview Makers District &middot; San Francisco, CA</div>
+  <div class="hero-headline">
+    BAYVIEW
+    <span class="accent">MAKES.</span>
+  </div>
+  <div class="hero-sub">
+    <p class="hero-descriptor">The official press &amp; collaboration resource for the Bayview Makers District — where artisans, producers, and creators have built San Francisco for over 200 years.</p>
+    <div class="hero-ctas">
+      <a href="#press" class="btn-terra">Press &amp; Media</a>
+      <a href="#collaborate" class="btn-ghost">Collaborate</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Art &amp; Production <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Food &amp; Beverage <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Home &amp; Lifestyle <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Apparel <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Art &amp; Craft <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Bayview, San Francisco <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">200+ Years of Heritage <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">50+ Local Makers <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Pets <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Art &amp; Production <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Food &amp; Beverage <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Home &amp; Lifestyle <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Apparel <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Art &amp; Craft <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Bayview, San Francisco <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">200+ Years of Heritage <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">50+ Local Makers <span class="marquee-sep">&middot;</span></span>
+    <span class="marquee-item">Pets <span class="marquee-sep">&middot;</span></span>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="container">
+    <span class="section-num reveal">01 &mdash; The District</span>
+    <div class="about-grid">
+      <div>
+        <h2 class="section-title reveal rd1">From Sake<br>to Soul Food.</h2>
+        <div class="section-rule"></div>
+        <blockquote class="about-pull reveal rd2">
+          &ldquo;We are the ones that harvest. We are the ones that learned from our elders — and we&rsquo;ve been making something for everyone in <strong>Bayview</strong> for over two centuries.&rdquo;
+        </blockquote>
+        <p class="about-body reveal rd3">The Bayview Makers District is an inclusive collective representing artisans, producers, and businesses rooted in San Francisco&rsquo;s Bayview neighborhood. Spanning four square miles of authentic craft and culture, BMD is the unbiased voice of the makers who define this community — supported by EDoT, Bayview&rsquo;s Economic Development Team.</p>
+      </div>
+      <div>
+        <div class="stats-grid reveal rd2">
+          <div class="stat-box">
+            <span class="stat-num">200+</span>
+            <span class="stat-label">Years of Heritage</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">50+</span>
+            <span class="stat-label">Active Makers</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">6</span>
+            <span class="stat-label">Maker Categories</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">4mi²</span>
+            <span class="stat-label">Bayview District</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRESS ═══ -->
+<section id="press">
+  <div class="container">
+    <div class="press-header">
+      <div>
+        <span class="section-num reveal">02 &mdash; Press &amp; Media</span>
+        <h2 class="section-title reveal rd1">In the News.</h2>
+      </div>
+      <div class="media-contact reveal rd2">
+        Press inquiries:<br>
+        <a href="mailto:press@bayviewmakers.com">press@bayviewmakers.com</a>
+      </div>
+    </div>
+
+    <div class="press-grid">
+      <div class="press-card reveal">
+        <div class="press-pub">SF Chronicle</div>
+        <div class="press-title">&ldquo;The Bayview Makers District is redefining what it means to build community through craft in San Francisco.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+      <div class="press-card reveal rd1">
+        <div class="press-pub">KQED</div>
+        <div class="press-title">&ldquo;Sequoia Sake, Yvonne&rsquo;s Southern Sweets, and dozens more — Bayview is quietly becoming SF&rsquo;s most vibrant maker hub.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+      <div class="press-card reveal rd2">
+        <div class="press-pub">Eater SF</div>
+        <div class="press-title">&ldquo;From small-batch spirits to soul food, the Bayview neighborhood punches far above its weight in culinary craft.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+      <div class="press-card reveal">
+        <div class="press-pub">Mission Local</div>
+        <div class="press-title">&ldquo;An unbiased directory celebrating the artisans and producers who call Bayview home — and have for generations.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+      <div class="press-card reveal rd1">
+        <div class="press-pub">SF Business Times</div>
+        <div class="press-title">&ldquo;Backed by EDoT, the Bayview Makers District is building economic infrastructure through culture and craft.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+      <div class="press-card reveal rd2">
+        <div class="press-pub">48 Hills</div>
+        <div class="press-title">&ldquo;The makers of Bayview represent everything that&rsquo;s still alive and generative about San Francisco&rsquo;s neighborhood culture.&rdquo;</div>
+        <div class="press-date">Add publication date</div>
+      </div>
+    </div>
+
+    <div class="press-kit-bar reveal">
+      <div>
+        <div class="press-kit-title">Download the Press Kit</div>
+        <div class="press-kit-sub">High-res assets, fact sheet, maker profiles &amp; boilerplate copy</div>
+      </div>
+      <a href="mailto:press@bayviewmakers.com?subject=Press Kit Request — BMD" class="btn-terra">Request Press Kit &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSTAGRAM / ARTISTS ═══ -->
+<section id="instagram">
+  <div class="container">
+    <div class="ig-header">
+      <div>
+        <span class="section-num reveal">03 &mdash; Artists &amp; Makers</span>
+        <h2 class="section-title reveal rd1">Follow the<br>Makers.</h2>
+      </div>
+      <a href="https://instagram.com/bayviewmakers" target="_blank" class="ig-handle reveal rd2">@bayviewmakers &nearr;</a>
+    </div>
+
+    <div class="ig-grid" id="ig-grid">
+      <!--
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        HOW TO ADD INSTAGRAM VIDEOS:
+        1. Go to an Instagram post/reel you want to feature
+        2. Click the "···" menu → "Embed"
+        3. Copy the embed code
+        4. Replace one of the .ig-card divs below with:
+           <div class="ig-embed-wrap">
+             [PASTE INSTAGRAM EMBED CODE HERE]
+           </div>
+        The Instagram embed.js script is loaded at the bottom of this page.
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      -->
+
+      <!-- PLACEHOLDER 1 — Replace with Instagram embed -->
+      <div class="ig-card reveal">
+        <div class="ig-card-bg"></div>
+        <div class="ig-card-lines"></div>
+        <div class="ig-play"></div>
+        <div class="ig-card-info">
+          <span class="ig-artist-name">Artist Name</span>
+          <span class="ig-artist-type">Food &amp; Beverage</span>
+          <span class="ig-artist-loc">&#128205; Bayview, SF</span>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDER 2 — Replace with Instagram embed -->
+      <div class="ig-card reveal rd1">
+        <div class="ig-card-bg"></div>
+        <div class="ig-card-lines"></div>
+        <div class="ig-play"></div>
+        <div class="ig-card-info">
+          <span class="ig-artist-name">Artist Name</span>
+          <span class="ig-artist-type">Art &amp; Craft</span>
+          <span class="ig-artist-loc">&#128205; Bayview, SF</span>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDER 3 — Replace with Instagram embed -->
+      <div class="ig-card reveal rd2">
+        <div class="ig-card-bg"></div>
+        <div class="ig-card-lines"></div>
+        <div class="ig-play"></div>
+        <div class="ig-card-info">
+          <span class="ig-artist-name">Artist Name</span>
+          <span class="ig-artist-type">Apparel</span>
+          <span class="ig-artist-loc">&#128205; Bayview, SF</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ig-note reveal">
+      <strong>Team note:</strong> Replace the placeholder cards above with real Instagram embed codes from your artist posts.
+      Go to any Instagram post &rarr; tap &ldquo;&middot;&middot;&middot;&rdquo; &rarr; &ldquo;Embed&rdquo; &rarr; copy the code and replace the <code>.ig-card</code> div with an <code>.ig-embed-wrap</code> div containing the embed. Add as many as you like — the grid will expand automatically.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COLLABORATE ═══ -->
+<section id="collaborate">
+  <div class="container">
+    <span class="section-num reveal">04 &mdash; Collaborate</span>
+    <h2 class="section-title reveal rd1">Work with BMD.</h2>
+    <p class="reveal rd2" style="font-family:var(--font-body);font-size:0.9rem;color:rgba(242,237,227,0.4);font-style:italic;max-width:560px;line-height:1.9;margin-top:1rem;">We partner with brands, organizations, media outlets, and event producers who align with our mission of celebrating authentic craft and community in Bayview.</p>
+
+    <div class="collab-grid">
+      <div class="collab-card reveal">
+        <div class="collab-bg-num">01</div>
+        <div class="collab-type-tag">Brand Partnerships</div>
+        <div class="collab-title">Brand<br>Collabs</div>
+        <p class="collab-desc">Partner with the makers who define Bayview. Co-branded products, featured placements, and storytelling campaigns that connect your brand to authentic San Francisco craft culture.</p>
+        <ul class="collab-list">
+          <li>Co-branded product runs</li>
+          <li>Featured maker spotlights</li>
+          <li>Campaign integration</li>
+          <li>Community activations</li>
+        </ul>
+      </div>
+      <div class="collab-card reveal rd1">
+        <div class="collab-bg-num">02</div>
+        <div class="collab-type-tag">Events &amp; Experiences</div>
+        <div class="collab-title">Event<br>Sponsorships</div>
+        <p class="collab-desc">Sponsor BMD events, pop-ups, and community gatherings. Put your brand at the center of Bayview&rsquo;s most vibrant cultural moments — from maker markets to culinary showcases.</p>
+        <ul class="collab-list">
+          <li>Maker markets &amp; pop-ups</li>
+          <li>Culinary &amp; tasting events</li>
+          <li>Cultural showcases</li>
+          <li>Neighborhood activations</li>
+        </ul>
+      </div>
+      <div class="collab-card reveal rd2">
+        <div class="collab-bg-num">03</div>
+        <div class="collab-type-tag">Media &amp; Press</div>
+        <div class="collab-title">Press<br>Features</div>
+        <p class="collab-desc">Pitch a story, request an interview, or commission a feature on the makers of Bayview. We work with journalists, photographers, filmmakers, and content creators.</p>
+        <ul class="collab-list">
+          <li>Maker interviews &amp; profiles</li>
+          <li>Photography &amp; video access</li>
+          <li>Commissioned content</li>
+          <li>Documentary features</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="collab-bottom reveal">
+      <div class="collab-bottom-title">Ready to Build Something?</div>
+      <p class="collab-bottom-sub">Tell us what you have in mind — we respond to every pitch.</p>
+      <a href="#contact" class="btn-terra">Submit a Pitch &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BRAND ASSETS ═══ -->
+<section id="assets">
+  <div class="container">
+    <span class="section-num reveal">05 &mdash; Brand Assets</span>
+    <h2 class="section-title reveal rd1">Brand<br>Guidelines.</h2>
+    <p class="assets-into reveal rd2">Official logos, color palette, and photography for press and editorial use. Please review usage guidelines before publishing.</p>
+
+    <div class="assets-grid">
+      <div class="asset-card reveal">
+        <div class="asset-preview ap-dark">BMD</div>
+        <div class="asset-info">
+          <span class="asset-name">Primary Logo</span>
+          <span class="asset-desc">Dark background — primary mark</span>
+          <a href="mailto:press@bayviewmakers.com?subject=Asset Request — Primary Logo" class="asset-dl">&darr; Request File</a>
+        </div>
+      </div>
+      <div class="asset-card reveal rd1">
+        <div class="asset-preview ap-light">BMD</div>
+        <div class="asset-info">
+          <span class="asset-name">Light Version</span>
+          <span class="asset-desc">Light background — reversed mark</span>
+          <a href="mailto:press@bayviewmakers.com?subject=Asset Request — Light Logo" class="asset-dl">&darr; Request File</a>
+        </div>
+      </div>
+      <div class="asset-card reveal rd2">
+        <div class="asset-preview ap-terra">BMD</div>
+        <div class="asset-info">
+          <span class="asset-name">Color Version</span>
+          <span class="asset-desc">Terracotta — accent colorway</span>
+          <a href="mailto:press@bayviewmakers.com?subject=Asset Request — Color Logo" class="asset-dl">&darr; Request File</a>
+        </div>
+      </div>
+      <div class="asset-card reveal rd3">
+        <div class="asset-preview ap-palette">
+          <div class="palette-dots">
+            <div class="palette-dot" style="background:#0E0C0A;"></div>
+            <div class="palette-dot" style="background:#C4522A;"></div>
+            <div class="palette-dot" style="background:#D4A843;"></div>
+            <div class="palette-dot" style="background:#F2EDE3;border:1px solid rgba(0,0,0,0.1);"></div>
+          </div>
+          <span style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:rgba(14,12,10,0.4);text-transform:uppercase;">Color Palette</span>
+        </div>
+        <div class="asset-info">
+          <span class="asset-name">Color Palette</span>
+          <span class="asset-desc">Ink &middot; Terra &middot; Gold &middot; Paper</span>
+          <a href="mailto:press@bayviewmakers.com?subject=Asset Request — Color Palette" class="asset-dl">&darr; Request Swatches</a>
+        </div>
+      </div>
+    </div>
+    <p class="assets-note reveal">Assets are provided for editorial and press use only. Commercial use requires written approval from the Bayview Makers District. Contact <a href="mailto:press@bayviewmakers.com" style="color:var(--terra);text-decoration:none;">press@bayviewmakers.com</a> with questions.</p>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="container">
+    <span class="section-num reveal">06 &mdash; Get in Touch</span>
+    <h2 class="section-title reveal rd1">Pitch Us<br>Anything.</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-intro reveal">Whether you&rsquo;re a journalist, brand partner, event producer, or filmmaker — we want to hear from you. Every pitch gets a response.</p>
+        <div class="contact-types reveal rd1">
+          <div class="ct-item">Press &amp; Media Inquiries</div>
+          <div class="ct-item">Brand Collaboration Pitches</div>
+          <div class="ct-item">Event Sponsorships</div>
+          <div class="ct-item">Photography &amp; Film Access</div>
+          <div class="ct-item">Brand Asset Requests</div>
+        </div>
+      </div>
+      <div>
+        <form id="pitch-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" name="name" class="form-input" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Organization</label>
+              <input type="text" name="organization" class="form-input" placeholder="Publication, brand, etc.">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" required placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type of Inquiry</label>
+            <select name="inquiry_type" class="form-select form-input" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Press / Media Coverage</option>
+              <option>Brand Collaboration</option>
+              <option>Event Sponsorship</option>
+              <option>Photography / Film Access</option>
+              <option>Brand Asset Request</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Pitch</label>
+            <textarea name="message" class="form-textarea" required placeholder="Tell us what you have in mind..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Pitch &rarr;</button>
+          <div id="form-success">&#10003; Pitch received — we&rsquo;ll be in touch shortly.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="#hero" class="footer-mark">BM<span>D</span></a>
+    <ul class="footer-links">
+      <li><a href="https://www.bayviewmakers.com" target="_blank">Main Site &nearr;</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#instagram">Artists</a></li>
+      <li><a href="#collaborate">Collaborate</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 Bayview Makers District &middot; Bayview, San Francisco</span>
+  </div>
+</footer>
+
+<script async src="//www.instagram.com/embed.js"></script>
+<script>
+  // Progress bar + nav scroll
+  window.addEventListener('scroll', () => {
+    const max = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (window.scrollY / max * 100) + '%';
+    document.getElementById('top-nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }});
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+  document.querySelectorAll('#nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('nav-links').classList.remove('open'));
+  });
+
+  // Contact form — mailto fallback
+  document.getElementById('pitch-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(e.target));
+    const body = `Name: ${d.name}\nOrg: ${d.organization || 'N/A'}\nType: ${d.inquiry_type}\n\n${d.message}`;
+    window.location.href = `mailto:press@bayviewmakers.com?subject=BMD Pitch — ${d.inquiry_type}&body=${encodeURIComponent(body)}`;
+    document.getElementById('form-success').style.display = 'block';
+    e.target.querySelector('.form-submit').textContent = '✓ Opening email...';
+  });
+</script>
+</body>
+</html>
